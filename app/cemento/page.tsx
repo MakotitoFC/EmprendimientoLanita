@@ -16,23 +16,21 @@ export default async function CementoPage() {
   const productos = (data as Producto[]) ?? []
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="mb-10">
-        <h1 className="text-3xl font-serif font-semibold text-stone-800 mb-2">Objetos de cemento</h1>
-        <p className="text-stone-500">
-          La misma forma, el color que vos elijas. Personalizá tu pieza.
+    <div className="max-w-6xl mx-auto px-4 py-6 md:py-12">
+      <div className="mb-6 md:mb-10">
+        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-stone-800 mb-1">Objetos de cemento</h1>
+        <p className="text-stone-500 text-sm md:text-base">
+          La misma forma, el color que vos elijas. Cada pieza a tu medida.
         </p>
       </div>
 
       {productos.length === 0 ? (
         <div className="text-center py-20 text-stone-400">
-          <p className="text-lg">No hay productos de cemento disponibles por el momento.</p>
+          <p>No hay productos de cemento disponibles por el momento.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {productos.map(p => (
-            <ProductCard key={p.id} producto={p} />
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+          {productos.map(p => <ProductCard key={p.id} producto={p} />)}
         </div>
       )}
     </div>

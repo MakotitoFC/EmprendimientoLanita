@@ -21,7 +21,7 @@ export default function ProductCard({ producto, precioFinal, tienePromocion }: P
 
   return (
     <Link href={href} className="group block">
-      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-stone-100">
+      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-stone-100 active:scale-[0.98] transition-transform">
         {/* Image */}
         <div className="relative aspect-square overflow-hidden bg-stone-50">
           {imagen ? (
@@ -37,24 +37,24 @@ export default function ProductCard({ producto, precioFinal, tienePromocion }: P
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-stone-300">
-              <Gem size={40} />
+              <Gem size={36} />
             </div>
           )}
 
           {/* Badges */}
           <div className="absolute top-2 left-2 flex flex-col gap-1">
             {producto.tipo === 'piedra' && (
-              <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-0.5 rounded-full">
+              <span className="bg-amber-100 text-amber-800 text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full">
                 Pieza única
               </span>
             )}
             {noDisponible && (
-              <span className="bg-stone-700 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+              <span className="bg-stone-700/90 text-white text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full">
                 No disponible
               </span>
             )}
             {tienePromocion && !noDisponible && (
-              <span className="bg-rose-100 text-rose-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+              <span className="bg-rose-100 text-rose-700 text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full">
                 Promoción
               </span>
             )}
@@ -62,24 +62,25 @@ export default function ProductCard({ producto, precioFinal, tienePromocion }: P
         </div>
 
         {/* Info */}
-        <div className="p-4">
-          <h3 className="font-medium text-stone-800 text-sm leading-snug line-clamp-2 mb-1">
+        <div className="p-3 md:p-4">
+          <h3 className="font-medium text-stone-800 text-xs md:text-sm leading-snug line-clamp-2 mb-1">
             {producto.nombre}
           </h3>
           {producto.descripcion_corta && (
-            <p className="text-xs text-stone-500 line-clamp-1 mb-2">{producto.descripcion_corta}</p>
+            <p className="text-[10px] md:text-xs text-stone-500 line-clamp-1 mb-1.5 md:mb-2">
+              {producto.descripcion_corta}
+            </p>
           )}
-          <div className="flex items-baseline gap-2">
+          <div className="flex items-baseline gap-1.5 md:gap-2">
             {tienePromocion && precioFinal !== undefined ? (
               <>
-                <span className="font-semibold text-stone-800">{formatPrice(precioFinal)}</span>
-                <span className="text-xs text-stone-400 line-through">{formatPrice(producto.precio_base)}</span>
+                <span className="font-bold text-stone-800 text-sm md:text-base">{formatPrice(precioFinal)}</span>
+                <span className="text-[10px] md:text-xs text-stone-400 line-through">{formatPrice(producto.precio_base)}</span>
               </>
             ) : (
-              <span className="font-semibold text-stone-800">
-                {producto.tipo === 'cemento' || producto.tipo === 'mdf'
-                  ? `Desde ${formatPrice(producto.precio_base)}`
-                  : formatPrice(producto.precio_base)}
+              <span className="font-bold text-stone-800 text-sm md:text-base">
+                {(producto.tipo === 'cemento' || producto.tipo === 'mdf') && 'Desde '}
+                {formatPrice(producto.precio_base)}
               </span>
             )}
           </div>

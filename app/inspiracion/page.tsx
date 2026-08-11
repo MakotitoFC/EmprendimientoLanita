@@ -17,39 +17,35 @@ export default async function InspiracionPage() {
   const mdf = disenios.filter(d => d.tipo === 'mdf')
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="mb-10">
-        <h1 className="text-3xl font-serif font-semibold text-stone-800 mb-2">Inspiración</h1>
-        <p className="text-stone-500">
-          Algunos de los trabajos que ya hicimos. Puede ser tu punto de partida.
+    <div className="max-w-6xl mx-auto px-4 py-6 md:py-12">
+      <div className="mb-6 md:mb-10">
+        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-stone-800 mb-1">Inspiración</h1>
+        <p className="text-stone-500 text-sm md:text-base">
+          Trabajos que ya hicimos. Tu punto de partida.
         </p>
       </div>
 
       {cemento.length > 0 && (
-        <section className="mb-14">
-          <h2 className="text-xl font-serif font-semibold text-stone-800 mb-5">Objetos de cemento</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {cemento.map(d => (
-              <GalleryCard key={d.id} disenio={d} />
-            ))}
+        <section className="mb-10 md:mb-14">
+          <h2 className="text-base md:text-xl font-serif font-semibold text-stone-700 mb-4">Cemento</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {cemento.map(d => <GalleryCard key={d.id} disenio={d} />)}
           </div>
         </section>
       )}
 
       {mdf.length > 0 && (
         <section>
-          <h2 className="text-xl font-serif font-semibold text-stone-800 mb-5">Cuadros MDF</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {mdf.map(d => (
-              <GalleryCard key={d.id} disenio={d} />
-            ))}
+          <h2 className="text-base md:text-xl font-serif font-semibold text-stone-700 mb-4">Cuadros MDF</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {mdf.map(d => <GalleryCard key={d.id} disenio={d} />)}
           </div>
         </section>
       )}
 
       {disenios.length === 0 && (
         <div className="text-center py-20 text-stone-400">
-          <p className="text-lg">Pronto vamos a tener ejemplos acá.</p>
+          <p>Pronto vamos a tener ejemplos acá.</p>
         </div>
       )}
     </div>
@@ -71,7 +67,7 @@ function GalleryCard({ disenio }: { disenio: DisenioEjemplo & { producto: { nomb
         )}
       </div>
       <div className="p-3">
-        <p className="text-sm font-medium text-stone-800">{disenio.nombre_diseno}</p>
+        <p className="text-xs md:text-sm font-medium text-stone-800 leading-tight">{disenio.nombre_diseno}</p>
         {disenio.descripcion && (
           <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{disenio.descripcion}</p>
         )}

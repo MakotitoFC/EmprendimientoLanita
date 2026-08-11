@@ -2,9 +2,24 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="bg-stone-800 text-stone-300 mt-20">
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer className="bg-stone-800 text-stone-300 md:mt-20">
+      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+        {/* Mobile: compact */}
+        <div className="md:hidden text-center space-y-4">
+          <h3 className="text-white font-serif text-lg font-semibold">Artesanías</h3>
+          <p className="text-stone-400 text-xs leading-relaxed">
+            Objetos hechos con amor. Cada pieza es única.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 text-xs">
+            <Link href="/piezas-unicas" className="hover:text-white transition-colors">Piezas únicas</Link>
+            <Link href="/cemento" className="hover:text-white transition-colors">Cemento</Link>
+            <Link href="/cuadros-mdf" className="hover:text-white transition-colors">Cuadros MDF</Link>
+            <Link href="/inspiracion" className="hover:text-white transition-colors">Inspiración</Link>
+          </div>
+        </div>
+
+        {/* Desktop: full */}
+        <div className="hidden md:grid md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-white font-serif text-lg font-semibold mb-3">Artesanías</h3>
             <p className="text-sm leading-relaxed text-stone-400">
@@ -27,7 +42,8 @@ export default function Footer() {
             </p>
           </div>
         </div>
-        <div className="border-t border-stone-700 mt-8 pt-6 text-center text-xs text-stone-500">
+
+        <div className="border-t border-stone-700 mt-6 md:mt-8 pt-5 text-center text-xs text-stone-500">
           © {new Date().getFullYear()} Artesanías. Hecho con cariño.
         </div>
       </div>
