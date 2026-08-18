@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { cn, formatPrice } from '@/lib/utils'
 import type { Producto } from '@/lib/types'
-import { Gem, ShoppingCart } from 'lucide-react'
+import { Gem, ShoppingCart, Plus } from 'lucide-react'
 import { useCart } from '@/stores/cart'
 import ConsultaButton from '@/components/consulta/ConsultaButton'
 
@@ -92,16 +92,17 @@ export default function ProductCard({ producto, precioFinal, tienePromocion }: P
         </div>
       </Link>
 
-      {/* Acciones */}
+      {/* Acciones — solo iconos */}
       {!noDisponible && (
         <div className="px-3 pb-3 md:px-4 md:pb-4 flex gap-2">
-          <ConsultaButton product={producto} size="sm" className="flex-1" />
+          <ConsultaButton product={producto} size="sm" iconOnly className="flex-1" />
           <button
             onClick={() => addItem(producto, 1, {}, precio)}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-stone-800 text-white rounded-2xl text-xs font-medium hover:bg-stone-700 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1 bg-stone-800 text-white rounded-2xl py-2 hover:bg-stone-700 transition-colors"
+            aria-label="Agregar al carrito"
           >
-            <ShoppingCart size={12} />
-            Agregar
+            <ShoppingCart size={13} />
+            <Plus size={11} strokeWidth={3} />
           </button>
         </div>
       )}

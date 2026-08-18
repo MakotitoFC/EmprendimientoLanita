@@ -77,7 +77,7 @@ export default function Navbar() {
               const Icon = l.icon
               const active = pathname === l.href || (l.href !== '/' && pathname.startsWith(l.href))
               return (
-                <li key={l.href} className="flex-1">
+                <li key={l.href} className="flex-1 relative">
                   <Link
                     href={l.href}
                     className={cn(
@@ -90,7 +90,7 @@ export default function Navbar() {
                       {l.label}
                     </span>
                     {active && (
-                      <span className="absolute bottom-0 w-1 h-1 rounded-full bg-stone-800" />
+                      <span className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-stone-800" />
                     )}
                   </Link>
                 </li>

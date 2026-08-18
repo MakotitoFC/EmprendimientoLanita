@@ -84,39 +84,21 @@ export default function PiedraClient({ producto, precioFinal, tienePromocion }: 
             {/* Payment tags */}
             <PaymentTags />
 
-            {/* CTA — desktop */}
-            <div className="hidden md:flex flex-col gap-2">
-              {!noDisponible ? (
-                <>
-                  <AddToCartButton product={producto} unitPrice={precio} className="w-full" size="lg" />
-                  <ConsultaButton product={producto} className="w-full" />
-                </>
-              ) : (
-                <div className="bg-stone-100 rounded-xl p-4 text-center">
-                  <p className="text-stone-500 font-medium text-sm">Esta pieza ya encontró su hogar 🏡</p>
-                  <p className="text-stone-400 text-xs mt-1">Mira las otras piezas disponibles.</p>
-                </div>
-              )}
-            </div>
+            {/* CTA — ambos breakpoints, dentro del detalle */}
+            {!noDisponible ? (
+              <div className="flex gap-2 mt-auto pt-2">
+                <ConsultaButton product={producto} className="flex-1" />
+                <AddToCartButton product={producto} unitPrice={precio} className="flex-1" size="lg" />
+              </div>
+            ) : (
+              <div className="bg-stone-100 rounded-xl p-4 text-center mt-auto">
+                <p className="text-stone-500 font-medium text-sm">Esta pieza ya encontró su hogar 🏡</p>
+                <p className="text-stone-400 text-xs mt-1">Mira las otras piezas disponibles.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
-
-      {/* Mobile fixed bottom CTA */}
-      {!noDisponible && (
-        <div className="md:hidden fixed bottom-16 left-0 right-0 z-40 px-4 pb-3 pt-2 bg-white/95 backdrop-blur-sm border-t border-stone-100">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-lg font-bold text-stone-800">{formatPrice(precio)}</span>
-            {tienePromocion && precioFinal !== undefined && (
-              <span className="text-xs text-stone-400 line-through">{formatPrice(producto.precio_base)}</span>
-            )}
-          </div>
-          <div className="flex gap-2">
-            <ConsultaButton product={producto} className="flex-1" />
-            <AddToCartButton product={producto} unitPrice={precio} className="flex-1" size="lg" />
-          </div>
-        </div>
-      )}
     </>
   )
 }

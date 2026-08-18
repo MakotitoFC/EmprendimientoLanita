@@ -1,8 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import type { Producto } from '@/lib/types'
 import PiedrasCatalogo from './PiedrasCatalogo'
 
-export const revalidate = 60
+export const revalidate = 300
 
 export default async function PiedrasPage() {
   const supabase = await createClient()

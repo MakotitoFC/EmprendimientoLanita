@@ -118,10 +118,10 @@ export default function CementoClient({ producto, disenios, precioFinal, tienePr
 
             <PaymentTags />
 
-            {/* CTA desktop */}
-            <div className="hidden md:flex flex-col gap-2">
-              <AddToCartButton product={producto} unitPrice={precioTotal} options={options} className="w-full" size="lg" />
-              <ConsultaButton product={producto} className="w-full" />
+            {/* CTA — dentro del detalle */}
+            <div className="flex gap-2 mt-auto pt-2">
+              <ConsultaButton product={producto} className="flex-1" />
+              <AddToCartButton product={producto} unitPrice={precioTotal} options={options} className="flex-1" size="lg" />
             </div>
           </div>
         </div>
@@ -157,22 +157,6 @@ export default function CementoClient({ producto, disenios, precioFinal, tienePr
         )}
       </div>
 
-      {/* Mobile fixed bottom CTA */}
-      <div className="md:hidden fixed bottom-16 left-0 right-0 z-40 px-4 pb-3 pt-2 bg-white/95 backdrop-blur-sm border-t border-stone-100">
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <span className="text-xl font-bold text-stone-800">{formatPrice(precioTotal)}</span>
-            {conResina && <span className="text-xs text-stone-400 ml-1">c/ resina</span>}
-          </div>
-          {tienePromocion && precioFinal !== undefined && (
-            <span className="text-sm text-stone-400 line-through">{formatPrice(producto.precio_base)}</span>
-          )}
-        </div>
-        <div className="flex gap-2">
-          <ConsultaButton product={producto} className="flex-1" />
-          <AddToCartButton product={producto} unitPrice={precioTotal} options={options} className="flex-1" size="lg" />
-        </div>
-      </div>
     </>
   )
 }

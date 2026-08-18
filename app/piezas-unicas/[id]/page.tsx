@@ -4,7 +4,17 @@ import PiedraClient from './PiedraClient'
 import type { Producto } from '@/lib/types'
 import { getActivePromotion, getPrecioConPromocion } from '@/lib/utils'
 
-export const revalidate = 60
+export const revalidate = 300
+
+export async function generateStaticParams() {
+  const { createClient: createBrowserClient } = await import('@supabase/supabase-js')
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+  const { data } = await supabase.from('productos').select('id').eq('tipo', 'piedra').eq('is_active', true)
+  return (data ?? []).map((p: { id: string }) => ({ id: p.id }))
+}
 
 export default async function PiedraPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

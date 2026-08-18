@@ -1,8 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Image from 'next/image'
 import type { DisenioEjemplo } from '@/lib/types'
 
-export const revalidate = 60
+export const revalidate = 300
 
 export default async function InspiracionPage() {
   const supabase = await createClient()
@@ -19,7 +19,7 @@ export default async function InspiracionPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 md:py-12">
       <div className="mb-6 md:mb-10">
-        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-stone-800 mb-1">Inspiración</h1>
+        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-stone-800 mb-1">InspiraciÃ³n</h1>
         <p className="text-stone-500 text-sm md:text-base">
           Trabajos que ya hicimos. Tu punto de partida.
         </p>
@@ -45,7 +45,7 @@ export default async function InspiracionPage() {
 
       {disenios.length === 0 && (
         <div className="text-center py-20 text-stone-400">
-          <p>Pronto vamos a tener ejemplos acá.</p>
+          <p>Pronto vamos a tener ejemplos acÃ¡.</p>
         </div>
       )}
     </div>

@@ -1,10 +1,10 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { DisenioEjemplo } from '@/lib/types'
 import { ArrowRight } from 'lucide-react'
 
-export const revalidate = 60
+export const revalidate = 300
 
 export default async function CuadrosMdfPage() {
   const supabase = await createClient()
@@ -29,13 +29,13 @@ export default async function CuadrosMdfPage() {
           href="/personalizado"
           className="hidden md:inline-flex items-center gap-1.5 bg-stone-800 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-stone-700 transition-colors"
         >
-          Personalizar el mío <ArrowRight size={14} />
+          Personalizar el mÃ­o <ArrowRight size={14} />
         </Link>
       </div>
 
       {disenios.length === 0 ? (
         <div className="text-center py-24 text-stone-400">
-          <p className="mb-4">Pronto subimos los primeros diseños.</p>
+          <p className="mb-4">Pronto subimos los primeros diseÃ±os.</p>
           <Link href="/personalizado" className="text-stone-600 underline text-sm">Hacer pedido personalizado</Link>
         </div>
       ) : (
@@ -70,7 +70,7 @@ export default async function CuadrosMdfPage() {
           href="/personalizado"
           className="bg-stone-800 text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-stone-700 transition-colors"
         >
-          Personalizar el mío
+          Personalizar el mÃ­o
         </Link>
       </div>
     </div>

@@ -4,7 +4,6 @@ import { ShoppingBag, Check } from 'lucide-react'
 import { useState } from 'react'
 import type { Producto } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { formatPrice } from '@/lib/utils'
 
 interface Props {
   product: Producto
@@ -25,9 +24,9 @@ export default function AddToCartButton({ product, unitPrice, options = {}, clas
   }
 
   const sizes = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-5 py-3 text-sm',
-    lg: 'px-6 py-4 text-base',
+    sm: 'px-3 py-1.5 text-xs',
+    md: 'px-4 py-2 text-sm',
+    lg: 'px-4 py-2 text-sm',
   }
 
   return (
@@ -42,8 +41,8 @@ export default function AddToCartButton({ product, unitPrice, options = {}, clas
         className
       )}
     >
-      {added ? <Check size={18} /> : <ShoppingBag size={18} />}
-      {added ? '¡Agregado!' : `Agregar al carrito · ${formatPrice(unitPrice)}`}
+      {added ? <Check size={16} /> : <ShoppingBag size={16} />}
+      {added ? '¡Agregado!' : 'Agregar al carrito'}
     </button>
   )
 }

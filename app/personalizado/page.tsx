@@ -1,8 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import PersonalizadoClient from './PersonalizadoClient'
 import type { Producto, TamanoMDF, DisenioEjemplo } from '@/lib/types'
 
-export const revalidate = 60
+export const revalidate = 300
 
 export default async function PersonalizadoPage() {
   const supabase = await createClient()

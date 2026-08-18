@@ -1,8 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import type { Producto } from '@/lib/types'
 import CementoCatalogo from './CementoCatalogo'
 
-export const revalidate = 60
+export const revalidate = 300
 
 export default async function CementoPage() {
   const supabase = await createClient()

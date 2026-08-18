@@ -7,9 +7,10 @@ interface Props {
   product: Producto
   size?: 'sm' | 'md'
   className?: string
+  iconOnly?: boolean
 }
 
-export default function ConsultaButton({ product, size = 'md', className = '' }: Props) {
+export default function ConsultaButton({ product, size = 'md', className = '', iconOnly = false }: Props) {
   const { addItem, removeItem, hasItem, openConsulta } = useConsulta()
   const added = hasItem(product.id)
 
@@ -21,22 +22,25 @@ export default function ConsultaButton({ product, size = 'md', className = '' }:
     }
   }
 
-  const sizeClass = size === 'sm'
-    ? 'px-3 py-1.5 text-xs gap-1.5'
-    : 'px-4 py-2.5 text-sm gap-2'
+  const sizeClass = iconOnly
+    ? 'py-1.5 px-2.5'
+    : size === 'sm' ? 'px-3 py-1.5 text-xs gap-1.5' : 'px-4 py-2 text-sm gap-2'
 
   return (
     <button
       onClick={handleClick}
+      aria-label={added ? 'En lista de consulta' : 'Agregar a consulta'}
       className={`flex items-center justify-center rounded-2xl border font-medium transition-colors ${
         added
           ? 'border-stone-800 bg-stone-800 text-white'
           : 'border-stone-300 text-stone-600 hover:border-stone-500 hover:text-stone-800 bg-white'
       } ${sizeClass} ${className}`}
     >
-      {added
-        ? <><Check size={size === 'sm' ? 12 : 14} /> En lista</>
-        : <><MessageCircle size={size === 'sm' ? 12 : 14} /> Consultar</>
+      {iconOnly
+        ? (added ? <Check size={14} /> : <MessageCircle size={14} />)
+        : added
+          ? <><Check size={size === 'sm' ? 12 : 14} /> En lista</>
+          : <><MessageCircle size={size === 'sm' ? 12 : 14} /> Consultar</>
       }
     </button>
   )
