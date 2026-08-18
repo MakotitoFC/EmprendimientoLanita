@@ -84,7 +84,11 @@ export async function createOrder(input: unknown): Promise<{ orderId: string } |
     return { orderId: order.id }
   } catch (err) {
     if (err instanceof z.ZodError) return { error: err.issues[0]?.message ?? 'Datos inválidos' }
-    return { error: err instanceof Error ? err.message : 'Error al procesar el pedido' }
+    const msg =
+      err instanceof Error ? err.message
+      : typeof err === 'object' && err !== null && 'message' in err ? String((err as { message: unknown }).message)
+      : 'Error al procesar el pedido'
+    return { error: msg }
   }
 }
 

@@ -4,9 +4,9 @@ import { useCart } from '@/stores/cart'
 import { formatPrice } from '@/lib/utils'
 import { createOrder, type CheckoutInput } from '@/lib/actions/orders'
 import Image from 'next/image'
-import Link from 'next/link'
 import { X, Check, CheckCircle } from 'lucide-react'
 import { useEffect } from 'react'
+import { useDragToDismiss } from '@/hooks/useDragToDismiss'
 
 type Step = 1 | 2 | 3
 
@@ -56,6 +56,8 @@ export default function CheckoutModal({ onClose }: Props) {
   const [orderId, setOrderId] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [visible, setVisible] = useState(false)
+  const { onTouchStart, onTouchMove, onTouchEnd, dragStyle } = useDragToDismiss(onClose)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -67,6 +69,7 @@ export default function CheckoutModal({ onClose }: Props) {
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
+    requestAnimationFrame(() => setVisible(true))
     return () => { document.body.style.overflow = '' }
   }, [])
 
@@ -113,20 +116,31 @@ export default function CheckoutModal({ onClose }: Props) {
 
   return (
     <>
-      {/* Overlay */}
-      <div className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm" onClick={step === 3 ? onClose : undefined} />
+      <div
+        onClick={step === 3 ? onClose : undefined}
+        style={{ transition: 'opacity 0.35s cubic-bezier(0.4,0,0.2,1)' }}
+        className={`fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm ${visible ? 'opacity-100' : 'opacity-0'}`}
+      />
 
-      {/* Modal: bottom sheet mobile / centrado desktop */}
-      <div className="
-        fixed z-[60] bg-white flex flex-col shadow-2xl
-        bottom-0 left-0 right-0 rounded-t-2xl max-h-[95vh]
-        md:bottom-auto md:left-1/2 md:top-1/2 md:right-auto
-        md:-translate-x-1/2 md:-translate-y-1/2
-        md:w-[calc(100%-2rem)] md:max-w-lg md:rounded-2xl md:max-h-[88vh]
-      ">
+      <div
+        style={{ transition: 'transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s cubic-bezier(0.4,0,0.2,1)', ...dragStyle }}
+        className={`
+          fixed z-[60] bg-white flex flex-col shadow-2xl
+          bottom-0 left-0 right-0 rounded-t-2xl max-h-[95vh]
+          md:bottom-auto md:left-1/2 md:top-1/2 md:right-auto
+          md:-translate-x-1/2 md:-translate-y-1/2
+          md:w-[calc(100%-2rem)] md:max-w-lg md:rounded-2xl md:max-h-[88vh]
+          ${visible ? 'translate-y-0 opacity-100 md:scale-100' : 'translate-y-full opacity-0 md:scale-95 md:translate-y-[-50%]'}
+        `}
+      >
         {/* Drag handle mobile */}
-        <div className="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-1 bg-stone-200 rounded-full" />
+        <div
+          className="md:hidden flex justify-center pt-3 pb-2 flex-shrink-0 cursor-grab active:cursor-grabbing"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className="w-10 h-1 bg-stone-300 rounded-full" />
         </div>
 
         {/* Header */}
@@ -273,22 +287,11 @@ export default function CheckoutModal({ onClose }: Props) {
                 <CheckCircle size={32} className="text-green-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-stone-800 mb-1">¡Pedido recibido!</h3>
+                <h3 className="text-lg font-semibold text-stone-800 mb-1">¡Listo!</h3>
                 <p className="text-sm text-stone-500">Te contactaremos al número que dejaste para coordinar el pago y envío por WhatsApp.</p>
               </div>
-              <div className="bg-stone-50 rounded-xl p-3">
-                <p className="text-xs text-stone-400 mb-1">Número de pedido</p>
-                <p className="font-mono text-stone-700 text-xs break-all">{orderId}</p>
-              </div>
               <div className="flex flex-col gap-2 pt-2">
-                <Link
-                  href={`/pedido/${orderId}`}
-                  onClick={onClose}
-                  className="block w-full bg-stone-800 text-white py-3 rounded-2xl font-semibold text-sm hover:bg-stone-700 transition-colors"
-                >
-                  Ver estado de mi pedido
-                </Link>
-                <button onClick={onClose} className="text-stone-400 text-sm py-2">
+                <button onClick={onClose} className="w-full bg-stone-800 text-white py-3 rounded-2xl font-semibold text-sm hover:bg-stone-700 transition-colors">
                   Seguir comprando
                 </button>
               </div>

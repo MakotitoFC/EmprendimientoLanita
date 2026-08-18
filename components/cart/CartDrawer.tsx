@@ -6,19 +6,27 @@ import { formatPrice } from '@/lib/utils'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import CheckoutModal from './CheckoutModal'
+import { useDragToDismiss } from '@/hooks/useDragToDismiss'
 
 export default function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, total, count } = useCart()
   const whatsappNumber = useSettings(s => s.whatsappNumber)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const { onTouchStart, onTouchMove, onTouchEnd, dragStyle } = useDragToDismiss(closeCart)
 
   useEffect(() => {
-    if (isOpen) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = ''
-    return () => { document.body.style.overflow = '' }
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+      requestAnimationFrame(() => setVisible(true))
+    } else {
+      setVisible(false)
+      const t = setTimeout(() => { document.body.style.overflow = '' }, 350)
+      return () => clearTimeout(t)
+    }
   }, [isOpen])
 
-  if (!isOpen) return checkoutOpen ? <CheckoutModal onClose={() => setCheckoutOpen(false)} /> : null
+  if (!isOpen && !visible) return checkoutOpen ? <CheckoutModal onClose={() => setCheckoutOpen(false)} /> : null
 
   const totalVal = total()
   const countVal = count()
@@ -34,26 +42,31 @@ export default function CartDrawer() {
 
   return (
     <>
-      {/* Overlay con blur */}
       <div
-        className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
         onClick={closeCart}
+        style={{ transition: 'opacity 0.35s cubic-bezier(0.4,0,0.2,1)' }}
+        className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm ${visible ? 'opacity-100' : 'opacity-0'}`}
       />
 
-      {/*
-        Mobile  → bottom sheet (slide desde abajo, esquinas redondeadas arriba)
-        md+     → modal centrado (max-w-md, rounded-2xl)
-      */}
-      <div className="
-        fixed z-50 bg-white flex flex-col shadow-2xl
-        bottom-0 left-0 right-0 rounded-t-2xl max-h-[92vh]
-        md:bottom-auto md:left-1/2 md:top-1/2 md:right-auto
-        md:-translate-x-1/2 md:-translate-y-1/2
-        md:w-[calc(100%-2rem)] md:max-w-md md:rounded-2xl md:max-h-[80vh]
-      ">
-        {/* Drag handle — solo mobile */}
-        <div className="md:hidden flex justify-center pt-3 pb-1">
-          <div className="w-10 h-1 bg-stone-200 rounded-full" />
+      <div
+        style={{ transition: 'transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s cubic-bezier(0.4,0,0.2,1)', ...dragStyle }}
+        className={`
+          fixed z-50 bg-white flex flex-col shadow-2xl
+          bottom-0 left-0 right-0 rounded-t-2xl max-h-[92vh]
+          md:bottom-auto md:left-1/2 md:top-1/2 md:right-auto
+          md:-translate-x-1/2 md:-translate-y-1/2
+          md:w-[calc(100%-2rem)] md:max-w-md md:rounded-2xl md:max-h-[80vh]
+          ${visible ? 'translate-y-0 opacity-100 md:scale-100' : 'translate-y-full opacity-0 md:scale-95 md:translate-y-[-50%]'}
+        `}
+      >
+        {/* Drag handle — solo mobile, área táctil ampliada */}
+        <div
+          className="md:hidden flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className="w-10 h-1 bg-stone-300 rounded-full" />
         </div>
 
         {/* Header */}

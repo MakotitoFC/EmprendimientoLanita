@@ -2,22 +2,30 @@
 import { useConsulta } from '@/stores/consulta'
 import { useSettings } from '@/stores/settings'
 import { X, MessageCircle, Trash2, ShoppingCart, HelpCircle } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/stores/cart'
+import { useDragToDismiss } from '@/hooks/useDragToDismiss'
 
 export default function ConsultaDrawer() {
   const { items, isOpen, closeConsulta, removeItem, count } = useConsulta()
   const { addItem: addToCart } = useCart()
   const whatsappNumber = useSettings(s => s.whatsappNumber)
+  const [visible, setVisible] = useState(false)
+  const { onTouchStart, onTouchMove, onTouchEnd, dragStyle } = useDragToDismiss(closeConsulta)
 
   useEffect(() => {
-    if (isOpen) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = ''
-    return () => { document.body.style.overflow = '' }
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+      requestAnimationFrame(() => setVisible(true))
+    } else {
+      setVisible(false)
+      const t = setTimeout(() => { document.body.style.overflow = '' }, 350)
+      return () => clearTimeout(t)
+    }
   }, [isOpen])
 
-  if (!isOpen) return null
+  if (!isOpen && !visible) return null
 
   const enviarWA = () => {
     if (!items.length) return
@@ -28,18 +36,31 @@ export default function ConsultaDrawer() {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onClick={closeConsulta} />
+      <div
+        onClick={closeConsulta}
+        style={{ transition: 'opacity 0.35s cubic-bezier(0.4,0,0.2,1)' }}
+        className={`fixed inset-0 z-50 bg-black/40 backdrop-blur-sm ${visible ? 'opacity-100' : 'opacity-0'}`}
+      />
 
-      <div className="
-        fixed z-50 bg-white flex flex-col shadow-2xl
-        bottom-0 left-0 right-0 rounded-t-2xl max-h-[92vh]
-        md:bottom-auto md:left-1/2 md:top-1/2 md:right-auto
-        md:-translate-x-1/2 md:-translate-y-1/2
-        md:w-[calc(100%-2rem)] md:max-w-md md:rounded-2xl md:max-h-[80vh]
-      ">
+      <div
+        style={{ transition: 'transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s cubic-bezier(0.4,0,0.2,1)', ...dragStyle }}
+        className={`
+          fixed z-50 bg-white flex flex-col shadow-2xl
+          bottom-0 left-0 right-0 rounded-t-2xl max-h-[92vh]
+          md:bottom-auto md:left-1/2 md:top-1/2 md:right-auto
+          md:-translate-x-1/2 md:-translate-y-1/2
+          md:w-[calc(100%-2rem)] md:max-w-md md:rounded-2xl md:max-h-[80vh]
+          ${visible ? 'translate-y-0 opacity-100 md:scale-100' : 'translate-y-full opacity-0 md:scale-95 md:translate-y-[-50%]'}
+        `}
+      >
         {/* Drag handle mobile */}
-        <div className="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-1 bg-stone-200 rounded-full" />
+        <div
+          className="md:hidden flex justify-center pt-3 pb-2 flex-shrink-0 cursor-grab active:cursor-grabbing"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className="w-10 h-1 bg-stone-300 rounded-full" />
         </div>
 
         {/* Header */}
