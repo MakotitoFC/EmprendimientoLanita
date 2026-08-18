@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
-import { Package, Image as ImageIcon, Tag, Settings, Users, LogOut } from 'lucide-react'
+import { Package, Image as ImageIcon, Tag, Settings, Users, LogOut, ShoppingCart, UserCircle, LayoutDashboard } from 'lucide-react'
 
 interface Props {
   role: string
@@ -11,15 +11,20 @@ interface Props {
 }
 
 const vendorLinks = [
-  { href: '/dashboard/vendedor', label: 'Productos', icon: Package },
-  { href: '/dashboard/vendedor/disenios', label: 'Diseños', icon: ImageIcon },
-  { href: '/dashboard/vendedor/promociones', label: 'Promociones', icon: Tag },
-  { href: '/dashboard/vendedor/configuracion', label: 'Configuración', icon: Settings },
+  { href: '/dashboard/vendedor', label: 'Inicio', icon: LayoutDashboard, exact: true },
+  { href: '/dashboard/vendedor/productos', label: 'Productos', icon: Package, exact: false },
+  { href: '/dashboard/vendedor/pedidos', label: 'Pedidos', icon: ShoppingCart, exact: false },
+  { href: '/dashboard/vendedor/clientes', label: 'Clientes', icon: UserCircle, exact: false },
+  { href: '/dashboard/vendedor/disenios', label: 'Diseños', icon: ImageIcon, exact: false },
+  { href: '/dashboard/vendedor/promociones', label: 'Promociones', icon: Tag, exact: false },
+  { href: '/dashboard/vendedor/configuracion', label: 'Config', icon: Settings, exact: false },
 ]
 
 const adminLinks = [
-  { href: '/dashboard/admin', label: 'Usuarios', icon: Users },
-  { href: '/dashboard/vendedor', label: 'Productos', icon: Package },
+  { href: '/dashboard/admin', label: 'Usuarios', icon: Users, exact: true },
+  { href: '/dashboard/vendedor', label: 'Productos', icon: Package, exact: true },
+  { href: '/dashboard/vendedor/pedidos', label: 'Pedidos', icon: ShoppingCart, exact: false },
+  { href: '/dashboard/vendedor/clientes', label: 'Clientes', icon: UserCircle, exact: false },
 ]
 
 export default function DashboardNav({ role, name }: Props) {
@@ -50,7 +55,7 @@ export default function DashboardNav({ role, name }: Props) {
                   href={l.href}
                   className={cn(
                     'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                    pathname === l.href
+                    l.exact ? pathname === l.href : pathname.startsWith(l.href)
                       ? 'bg-stone-100 text-stone-900'
                       : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
                   )}

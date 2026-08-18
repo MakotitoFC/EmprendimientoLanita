@@ -1,12 +1,13 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
   return (
-    <footer className="bg-stone-800 text-stone-300 md:mt-20">
+    <footer className="bg-stone-900 text-stone-300 pb-16 md:pb-0">
       <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
         {/* Mobile: compact */}
         <div className="md:hidden text-center space-y-4">
-          <h3 className="text-white font-serif text-lg font-semibold">Artesanías</h3>
+          <Image src="/logo_desktop.png" alt="Artesanías de Lanita" width={100} height={36} className="h-9 w-auto object-contain mx-auto opacity-80" />
           <p className="text-stone-400 text-xs leading-relaxed">
             Objetos hechos con amor. Cada pieza es única.
           </p>
@@ -21,7 +22,7 @@ export default function Footer() {
         {/* Desktop: full */}
         <div className="hidden md:grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-white font-serif text-lg font-semibold mb-3">Artesanías</h3>
+            <Image src="/logo_desktop.png" alt="Artesanías de Lanita" width={120} height={40} className="h-10 w-auto object-contain mb-3 opacity-80" />
             <p className="text-sm leading-relaxed text-stone-400">
               Objetos artesanales hechos con amor y dedicación. Cada pieza es única.
             </p>
@@ -43,9 +44,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-stone-700 mt-6 md:mt-8 pt-5 text-center text-xs text-stone-500">
-          © {new Date().getFullYear()} Artesanías. Hecho con cariño.
-        </div>
+      </div>
+      <div className="border-t border-white/10 py-5 text-center text-xs text-stone-500">
+        © 2026 Maria Caffo. Todos los derechos reservados.
       </div>
     </footer>
   )

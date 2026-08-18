@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -10,6 +10,7 @@ import Image from 'next/image'
 interface Props {
   producto?: Producto
   tamanos?: TamanoMDF[]
+  redirectTo?: string
 }
 
 interface TamanoForm {
@@ -19,7 +20,7 @@ interface TamanoForm {
   is_available: boolean
 }
 
-export default function ProductForm({ producto, tamanos: tamanosProp = [] }: Props) {
+export default function ProductForm({ producto, tamanos: tamanosProp = [], redirectTo = '/dashboard/vendedor' }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -144,7 +145,7 @@ export default function ProductForm({ producto, tamanos: tamanosProp = [] }: Pro
         }
       }
 
-      router.push('/dashboard/vendedor')
+      router.push(redirectTo)
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ocurrió un error. Intentá de nuevo.')
@@ -258,7 +259,7 @@ export default function ProductForm({ producto, tamanos: tamanosProp = [] }: Pro
 
       {/* Type-specific fields */}
       {tipo === 'piedra' && (
-        <div className="bg-amber-50 rounded-2xl p-4 space-y-3">
+        <div className="bg-indigo-50 rounded-2xl p-4 space-y-3">
           <h3 className="text-sm font-semibold text-stone-700">Opciones de pieza única</h3>
           <label className="flex items-center gap-3 cursor-pointer">
             <input type="checkbox" checked={piedraDisponible} onChange={e => setPiedraDisponible(e.target.checked)} className="accent-stone-800 w-4 h-4" />
@@ -386,3 +387,4 @@ export default function ProductForm({ producto, tamanos: tamanosProp = [] }: Pro
     </form>
   )
 }
+

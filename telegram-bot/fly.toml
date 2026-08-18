@@ -1,0 +1,29 @@
+app = "artesanias-bot"
+primary_region = "gru"  # São Paulo — más cercano a Perú
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PYTHONUNBUFFERED = "1"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
+
+[deploy]
+  strategy = "immediate"
+
+# Mantener al menos 1 máquina corriendo siempre
+[machines]
+  auto_stop_machines = false
+  min_machines_running = 1

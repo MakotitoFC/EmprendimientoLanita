@@ -1,0 +1,49 @@
+import { notFound } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import ProductForm from '../../ProductForm'
+import type { Producto, TamanoMDF } from '@/lib/types'
+import Link from 'next/link'
+import { ChevronLeft, ShoppingBag } from 'lucide-react'
+import { formatPrice } from '@/lib/utils'
+
+export default async function EditarProductoPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await createClient()
+
+  const [{ data: producto }, { data: tamanos }, { data: ventas }] = await Promise.all([
+    supabase.from('productos').select('*').eq('id', id).single(),
+    supabase.from('tamanos_mdf').select('*').eq('producto_id', id).order('precio'),
+    supabase.from('order_items').select('quantity').eq('product_id', id),
+  ])
+
+  if (!producto) notFound()
+
+  const totalVendido = (ventas ?? []).reduce((acc, v) => acc + (v.quantity ?? 0), 0)
+
+  return (
+    <div>
+      <Link
+        href="/dashboard/vendedor/productos"
+        className="flex items-center gap-1 text-sm text-stone-500 hover:text-stone-800 transition-colors mb-6"
+      >
+        <ChevronLeft size={16} /> Volver a productos
+      </Link>
+
+      <div className="flex items-start justify-between gap-4 mb-8">
+        <h1 className="text-2xl font-serif font-semibold text-stone-800">Editar producto</h1>
+        {totalVendido > 0 && (
+          <div className="flex items-center gap-1.5 text-sm text-stone-500 bg-stone-100 rounded-xl px-3 py-1.5 flex-shrink-0">
+            <ShoppingBag size={14} />
+            <span>{totalVendido} vendido{totalVendido !== 1 ? 's' : ''}</span>
+          </div>
+        )}
+      </div>
+
+      <ProductForm
+        producto={producto as Producto}
+        tamanos={(tamanos as TamanoMDF[]) ?? []}
+        redirectTo="/dashboard/vendedor/productos"
+      />
+    </div>
+  )
+}

@@ -3,59 +3,75 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Gem, Box, Frame, Sparkles, Home } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import CartButton from '@/components/cart/CartButton'
+import CartDrawer from '@/components/cart/CartDrawer'
+import ConsultaNavButton from '@/components/consulta/ConsultaNavButton'
+import ConsultaDrawer from '@/components/consulta/ConsultaDrawer'
+import Image from 'next/image'
 
 const links = [
   { href: '/', label: 'Inicio', icon: Home },
-  { href: '/piezas-unicas', label: 'Piezas', icon: Gem },
+  { href: '/piezas-unicas', label: 'Piedras', icon: Gem },
   { href: '/cemento', label: 'Cemento', icon: Box },
   { href: '/cuadros-mdf', label: 'MDF', icon: Frame },
-  { href: '/inspiracion', label: 'Ideas', icon: Sparkles },
+  { href: '/personalizado', label: 'Personalizado', icon: Sparkles },
 ]
 
 export default function Navbar() {
   const pathname = usePathname()
 
-  // Don't show bottom nav in dashboard
   const isDashboard = pathname.startsWith('/dashboard') || pathname === '/login'
 
   return (
     <>
       {/* Top bar — desktop only */}
-      <header className="hidden md:block sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-stone-100">
+      <header className="hidden md:block sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-stone-200">
         <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="text-xl font-serif font-semibold text-stone-800 hover:text-stone-600 transition-colors">
-            Artesanías
+          <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
+            <Image src="/logo_desktop.png" alt="Artesanías de Lanita" width={160} height={52} className="h-10 w-auto object-contain" priority />
           </Link>
-          <ul className="flex items-center gap-8">
-            {links.slice(1).map(l => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className={cn(
-                    'text-sm font-medium transition-colors',
-                    pathname === l.href ? 'text-stone-900' : 'text-stone-500 hover:text-stone-900'
-                  )}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="flex items-center gap-6">
+            <ul className="flex items-center gap-8">
+              {links.map(l => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className={cn(
+                      'text-sm font-medium transition-colors',
+                      pathname === l.href ? 'text-stone-900' : 'text-stone-500 hover:text-stone-900'
+                    )}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="flex items-center gap-1">
+              <ConsultaNavButton />
+              <CartButton />
+            </div>
+          </div>
         </nav>
       </header>
 
       {/* Mobile top bar */}
-      <header className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-stone-100">
-        <div className="px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-serif font-semibold text-stone-800">
-            Artesanías
+      <header className="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-stone-200">
+        <div className="px-4 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
+            <Image src="/logo_mobile.png" alt="Artesanías de Lanita" width={140} height={48} className="h-10 w-auto object-contain" priority />
           </Link>
+          {!isDashboard && (
+            <div className="flex items-center gap-1">
+              <ConsultaNavButton />
+              <CartButton />
+            </div>
+          )}
         </div>
       </header>
 
       {/* Mobile bottom navigation */}
       {!isDashboard && (
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-100 safe-area-inset-bottom">
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-200 safe-area-inset-bottom">
           <ul className="flex items-center justify-around px-2 py-1">
             {links.map(l => {
               const Icon = l.icon
@@ -84,8 +100,9 @@ export default function Navbar() {
         </nav>
       )}
 
-      {/* Spacer so content isn't hidden behind bottom nav on mobile */}
-      {!isDashboard && <div className="md:hidden h-16" aria-hidden />}
+      {/* Drawers globales */}
+      {!isDashboard && <CartDrawer />}
+      {!isDashboard && <ConsultaDrawer />}
     </>
   )
 }

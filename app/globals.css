@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-poppins), system-ui, sans-serif;
+  --font-mono: 'Courier New', monospace;
 }
 
 body {
+  font-family: var(--font-poppins), system-ui, sans-serif;
   @apply bg-stone-50 text-stone-800 antialiased;
 }
 
 .font-serif {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-poppins), system-ui, sans-serif;
 }
 
 /* Safe area padding for devices with home indicator */
@@ -23,11 +24,23 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Hide scrollbar for horizontal scroll sections */
-.scrollbar-hide {
+/* Hide scrollbar globally (modals, drawers, etc.) */
+.scrollbar-hide,
+.overflow-y-auto,
+.overflow-x-auto {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.scrollbar-hide::-webkit-scrollbar {
+.scrollbar-hide::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
   display: none;
+}
+
+/* Custom select — elimina el estilo nativo del navegador */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: none;
 }

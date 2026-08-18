@@ -1,49 +1,32 @@
 'use client'
 import { useState } from 'react'
 import ImageGallery from '@/components/ui/ImageGallery'
-import Button from '@/components/ui/Button'
-import WhatsAppModal from '@/components/whatsapp/WhatsAppModal'
 import { formatPrice } from '@/lib/utils'
 import type { Producto, DisenioEjemplo } from '@/lib/types'
-import { MessageCircle, Droplets, ChevronLeft } from 'lucide-react'
+import { Droplets, ChevronLeft } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import AddToCartButton from '@/components/cart/AddToCartButton'
+import ConsultaButton from '@/components/consulta/ConsultaButton'
+import PaymentTags from '@/components/products/PaymentTags'
 
 interface Props {
   producto: Producto
   disenios: DisenioEjemplo[]
-  whatsappNumber: string
   precioFinal?: number
   tienePromocion?: boolean
 }
 
-export default function CementoClient({ producto, disenios, whatsappNumber, precioFinal, tienePromocion }: Props) {
+export default function CementoClient({ producto, disenios, precioFinal, tienePromocion }: Props) {
   const [color, setColor] = useState('')
   const [conResina, setConResina] = useState(false)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedDisenio, setSelectedDisenio] = useState<DisenioEjemplo | null>(null)
 
   const precioBase = precioFinal ?? producto.precio_base
   const precioTotal = precioBase + (conResina && producto.cemento_precio_resina ? producto.cemento_precio_resina : 0)
 
-  const buildMessage = (nombre: string, telefono: string) => {
-    const extras = selectedDisenio
-      ? `• Diseño de inspiración: ${selectedDisenio.nombre_diseno}\n• Color: ${color || 'A definir'}`
-      : `• Color: ${color || 'A definir'}`
-
-    return `PEDIDO - CEMENTO PERSONALIZADO
-
-Producto: ${producto.nombre}
-Cliente: ${nombre}
-Teléfono: ${telefono || 'No proporcionado'}
-
-OPCIONES ELEGIDAS:
-${extras}
-• Barniz/resina: ${conResina ? `Sí (+${formatPrice(producto.cemento_precio_resina ?? 0)})` : 'No'}
-
-Precio estimado: ${formatPrice(precioTotal)}
-
-Responder para confirmar disponibilidad y plazo.`
+  const options: Record<string, string> = {
+    ...(color && { color }),
+    ...(conResina && { resina: 'Sí' }),
   }
 
   return (
@@ -55,7 +38,7 @@ Responder para confirmar disponibilidad y plazo.`
         </Link>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-4 md:py-10 pb-36 md:pb-10">
+      <div className="max-w-4xl mx-auto px-4 py-4 md:py-8 pb-36 md:pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
 
           {/* Gallery */}
@@ -133,15 +116,12 @@ Responder para confirmar disponibilidad y plazo.`
               </div>
             )}
 
+            <PaymentTags />
+
             {/* CTA desktop */}
-            <div className="hidden md:block">
-              <Button variant="whatsapp" size="lg" className="w-full" onClick={() => { setSelectedDisenio(null); setModalOpen(true) }}>
-                <MessageCircle size={20} />
-                Enviar mi pedido por WhatsApp
-              </Button>
-              <p className="text-xs text-stone-400 text-center mt-2">
-                El vendedor confirma disponibilidad y plazo.
-              </p>
+            <div className="hidden md:flex flex-col gap-2">
+              <AddToCartButton product={producto} unitPrice={precioTotal} options={options} className="w-full" size="lg" />
+              <ConsultaButton product={producto} className="w-full" />
             </div>
           </div>
         </div>
@@ -150,7 +130,7 @@ Responder para confirmar disponibilidad y plazo.`
         {disenios.length > 0 && (
           <div className="mt-10 md:mt-16">
             <h2 className="text-lg md:text-2xl font-serif font-semibold text-stone-800 mb-1">Mirá algunos ejemplos</h2>
-            <p className="text-stone-500 text-xs md:text-sm mb-4">¿Te copa alguno? Hacé click en "Lo quiero así".</p>
+            <p className="text-stone-500 text-xs md:text-sm mb-4">Usá estos diseños de referencia cuando pidas por Telegram.</p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {disenios.map(d => (
                 <div key={d.id} className="bg-white rounded-2xl overflow-hidden border border-stone-100 shadow-sm">
@@ -162,12 +142,13 @@ Responder para confirmar disponibilidad y plazo.`
                   <div className="p-3">
                     <p className="text-xs md:text-sm font-medium text-stone-800 mb-1 leading-tight">{d.nombre_diseno}</p>
                     {d.descripcion && <p className="text-xs text-stone-500 mb-2 line-clamp-1">{d.descripcion}</p>}
-                    <button
-                      onClick={() => { setSelectedDisenio(d); setModalOpen(true) }}
-                      className="w-full text-xs bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center gap-1"
-                    >
-                      <MessageCircle size={11} /> Lo quiero así
-                    </button>
+                    <AddToCartButton
+                      product={producto}
+                      unitPrice={precioTotal}
+                      options={{ ...options, inspiracion: d.nombre_diseno }}
+                      className="w-full !py-1.5 !text-xs !px-3"
+                      size="sm"
+                    />
                   </div>
                 </div>
               ))}
@@ -187,19 +168,11 @@ Responder para confirmar disponibilidad y plazo.`
             <span className="text-sm text-stone-400 line-through">{formatPrice(producto.precio_base)}</span>
           )}
         </div>
-        <Button variant="whatsapp" size="lg" className="w-full" onClick={() => { setSelectedDisenio(null); setModalOpen(true) }}>
-          <MessageCircle size={18} />
-          Enviar mi pedido
-        </Button>
+        <div className="flex gap-2">
+          <ConsultaButton product={producto} className="flex-1" />
+          <AddToCartButton product={producto} unitPrice={precioTotal} options={options} className="flex-1" size="lg" />
+        </div>
       </div>
-
-      <WhatsAppModal
-        open={modalOpen}
-        onClose={() => { setModalOpen(false); setSelectedDisenio(null) }}
-        whatsappNumber={whatsappNumber}
-        buildMessage={buildMessage}
-        title={selectedDisenio ? `Pedir: ${selectedDisenio.nombre_diseno}` : 'Enviar mi pedido'}
-      />
     </>
   )
 }

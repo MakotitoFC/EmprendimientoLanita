@@ -7,11 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(price: number): string {
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    minimumFractionDigits: 0,
-  }).format(price)
+  return `S/ ${new Intl.NumberFormat('es-PE', { minimumFractionDigits: 0 }).format(price)}`
 }
 
 export function getActivePromotion(producto: Producto, promociones: Promocion[]): Promocion | null {

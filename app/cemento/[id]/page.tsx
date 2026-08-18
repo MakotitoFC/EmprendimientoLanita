@@ -10,10 +10,9 @@ export default async function CementoProductoPage({ params }: { params: Promise<
   const { id } = await params
   const supabase = await createClient()
 
-  const [{ data: producto }, { data: disenios }, { data: settings }, { data: promociones }] = await Promise.all([
+  const [{ data: producto }, { data: disenios }, { data: promociones }] = await Promise.all([
     supabase.from('productos').select('*').eq('id', id).eq('tipo', 'cemento').single(),
     supabase.from('disenos_ejemplo').select('*').eq('producto_id', id).eq('is_active', true),
-    supabase.from('vendor_settings').select('whatsapp_number').single(),
     supabase
       .from('promociones')
       .select('*, productos:promociones_productos(producto_id)')
@@ -32,7 +31,6 @@ export default async function CementoProductoPage({ params }: { params: Promise<
     <CementoClient
       producto={p}
       disenios={(disenios as DisenioEjemplo[]) ?? []}
-      whatsappNumber={settings?.whatsapp_number ?? ''}
       precioFinal={precioFinal}
       tienePromocion={!!promo}
     />
