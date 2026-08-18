@@ -19,7 +19,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <div className="min-h-screen bg-stone-50">
       <DashboardNav role={profile.role} name={profile.name ?? profile.email} />
-      <div className="max-w-7xl mx-auto px-4 py-8">{children}</div>
+      {/* desktop: offset sidebar (w-64) + top bar (h-14) */}
+      <main className="md:ml-64 md:pt-14 pb-20 md:pb-0">
+        <div className="max-w-5xl mx-auto px-4 py-6 md:py-8">
+          {children}
+        </div>
+      </main>
     </div>
   )
 }

@@ -15,35 +15,55 @@ function HeroCard({
   label,
   width,
   height,
+  mockColor = '#D6CFC7',
 }: {
   label: string
   width: number
   height: number
+  mockColor?: string
 }) {
   return (
     <div style={{ width, height, position: 'relative', flexShrink: 0 }}>
+      {/* Sombra */}
       <div style={{
         position: 'absolute',
-        inset: '16px 10px -10px',
-        borderRadius: 9999,
-        background: 'rgba(30,25,20,0.3)',
-        filter: 'blur(18px)',
+        inset: '12px 8px -8px',
+        borderRadius: 24,
+        background: 'rgba(30,25,20,0.25)',
+        filter: 'blur(16px)',
         zIndex: 0,
       }} />
+      {/* Card cuadrada con esquinas redondeadas */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        borderRadius: 9999,
+        borderRadius: 24,
         background: '#F5F4F0',
+        overflow: 'hidden',
         zIndex: 1,
-      }} />
+      }}>
+        {/* Mock image — gradiente de color */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: `linear-gradient(145deg, ${mockColor} 0%, #E8E2DA 100%)`,
+          opacity: 0.9,
+        }} />
+        {/* Textura sutil */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 60%)',
+        }} />
+      </div>
+      {/* Label */}
       <span style={{
         position: 'absolute',
         bottom: 14,
         left: 0,
         right: 0,
         textAlign: 'center',
-        color: 'rgba(60,50,40,0.4)',
+        color: 'rgba(60,50,40,0.45)',
         fontSize: 10,
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
@@ -122,20 +142,20 @@ export default async function HomePage() {
 
           {/* Cards — solo desktop */}
           <div className="order-2 w-full hidden lg:flex justify-center">
-            <div className="relative" style={{ width: 460, height: 560 }}>
+            <div className="relative" style={{ width: 580, height: 560 }}>
               <div style={{ position: 'absolute', left: 10, top: -80, zIndex: 2 }}>
                 <Link href="/piezas-unicas">
-                  <HeroCard label="Piedras" width={210} height={620} />
+                  <HeroCard label="Piedras" width={270} height={620} mockColor="#C9BFB4" />
                 </Link>
               </div>
-              <div style={{ position: 'absolute', left: 270, top: -360, zIndex: 3 }}>
+              <div style={{ position: 'absolute', left: 320, top: -360, zIndex: 3 }}>
                 <Link href="/cemento">
-                  <HeroCard label="Cemento" width={210} height={550} />
+                  <HeroCard label="Cemento" width={270} height={550} mockColor="#BFC4BC" />
                 </Link>
               </div>
-              <div style={{ position: 'absolute', left: 270, top: 230, zIndex: 1 }}>
+              <div style={{ position: 'absolute', left: 320, top: 230, zIndex: 1 }}>
                 <Link href="/cuadros-mdf">
-                  <HeroCard label="MDF" width={210} height={420} />
+                  <HeroCard label="MDF" width={270} height={420} mockColor="#C4BEB8" />
                 </Link>
               </div>
             </div>

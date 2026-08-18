@@ -12,10 +12,11 @@ export default function Footer() {
             Objetos hechos con amor. Cada pieza es única.
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-xs">
-            <Link href="/piezas-unicas" className="hover:text-white transition-colors">Piezas únicas</Link>
+            <Link href="/" className="hover:text-white transition-colors">Inicio</Link>
+            <Link href="/piezas-unicas" className="hover:text-white transition-colors">Piedras</Link>
             <Link href="/cemento" className="hover:text-white transition-colors">Cemento</Link>
-            <Link href="/cuadros-mdf" className="hover:text-white transition-colors">Cuadros MDF</Link>
-            <Link href="/inspiracion" className="hover:text-white transition-colors">Inspiración</Link>
+            <Link href="/cuadros-mdf" className="hover:text-white transition-colors">MDF</Link>
+            <Link href="/personalizado" className="hover:text-white transition-colors">Personalizado</Link>
           </div>
         </div>
 
@@ -30,10 +31,11 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold text-sm mb-3 uppercase tracking-wide">Tienda</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/piezas-unicas" className="hover:text-white transition-colors">Piezas únicas</Link></li>
-              <li><Link href="/cemento" className="hover:text-white transition-colors">Objetos de cemento</Link></li>
-              <li><Link href="/cuadros-mdf" className="hover:text-white transition-colors">Cuadros MDF</Link></li>
-              <li><Link href="/inspiracion" className="hover:text-white transition-colors">Inspiración</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Inicio</Link></li>
+              <li><Link href="/piezas-unicas" className="hover:text-white transition-colors">Piedras</Link></li>
+              <li><Link href="/cemento" className="hover:text-white transition-colors">Cemento</Link></li>
+              <li><Link href="/cuadros-mdf" className="hover:text-white transition-colors">MDF</Link></li>
+              <li><Link href="/personalizado" className="hover:text-white transition-colors">Personalizado</Link></li>
             </ul>
           </div>
           <div>
